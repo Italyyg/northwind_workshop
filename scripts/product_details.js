@@ -9,7 +9,7 @@ window.onload = () =>{
 
     let urlParams = new URLSearchParams(location.search);
 
-    console.log(urlParams.get("courseid"));
+    console.log(urlParams.get("productid"));
 
     if(urlParams.has("productid")){
 
@@ -17,7 +17,7 @@ window.onload = () =>{
         displayCourseDetails(urlParams.get("productid"));
     }else{
         //let them know we didnt have  a valid course id and send them back to courses
-        alert("no valid course Id");
+        alert("no valid product Id");
         window.location.href ="./index.html";
     }
 
@@ -54,7 +54,7 @@ async function getProductDetails(productid){
     return info;
 
     } catch(err){
-        console.log(err);
-        throw new Error(err);
+        alert("no valid product Id");
+        window.location.href ="./index.html";
     }
 }

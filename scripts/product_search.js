@@ -12,7 +12,7 @@ window.onload = () => {
     //calling the funtion where the options were applied to the second dropdown
     applyToDropdown();
 
-    catDrop.addEventListener("change", displayEverythingInSecond)
+    catDrop.addEventListener("change", displayEverythingInSecond);
 
     hideElement("#categorySearch");
 
@@ -24,10 +24,14 @@ window.onload = () => {
 //here i am running a function that will display everything on the list if
 //the value matches the "view all" value on the dropdown
 async function displayAll() {
+
+    
     let dropdown = document.querySelector("#productSearchDDL");
 
     //grabbing the table off the html to display the data
     let tbody = document.querySelector("#tableBody");
+
+    tbody.innerHTML = "";
 
     //we have have a fetch() action to get the data we need and we are then calling it here to work with
     let productsList = await getAllData();
@@ -50,6 +54,7 @@ async function displayAll() {
         // Reset just the dropdown menu to its default option
       document.querySelector("#productSearchDDL").selectedIndex = 0;
       document.querySelector("#tableBody").innerHTML = ""; // Clearing table body
+      hideElement("#categorySearch");
 
         console.log("naur babe")
     }
@@ -59,10 +64,17 @@ async function displayAll() {
 }
 async function displayEverythingInSecond(){
 
-    // let catDrop = document.querySelector("#categorySearch");
+    let catDrop = document.querySelector("#categorySearch");
 
     let catToValue= await displaySecondDrop();
     let tbody = document.querySelector("#tableBody");
+
+     tbody.innerHTML = "";
+    
+    if(catDrop.value === "0"){
+       
+        tbody.innerHTML = "";
+    }
 
     catToValue.forEach((product) => {
 
@@ -81,9 +93,11 @@ async function applyToDropdown(){
     //using the data we called to use it
     let allCategories = await getCategories();
 
+    
+
     //creating a default option to the dropwdown
     let defaultOption = document.createElement("option");
-    defaultOption.value = "";
+    defaultOption.value = "0";
     
     defaultOption.innerText = "----Select Category----";
  
@@ -112,6 +126,8 @@ async function applyToDropdown(){
 //a function that builds the table that will display the data
 function buildTable(tbody, data) {
 
+    
+
     //create the row fro the table
     let row = tbody.insertRow();
 
@@ -130,7 +146,7 @@ function buildTable(tbody, data) {
 
     let DetailCell = row.insertCell();
     DetailCell.innerHTML = 
-    `<a href ="./details.html?productid=${data.productId}"> Show details </a>`
+    `<a href ="./product_details.html?productid=${data.productId}"> Show details </a>`
 
 
 
