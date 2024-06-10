@@ -60,6 +60,10 @@ function buildTable(tbody, data) {
     let suppCell = row.insertCell();
     suppCell.innerHTML = data.supplier;
 
+    let DetailCell = row.insertCell();
+    DetailCell.innerHTML = 
+    `<a href ="./details.html?productid=${data.productId}"> Show details </a>`
+
 
 
 
@@ -94,23 +98,27 @@ async function getCategories(){
 
 async function applyToDropdown(){
 
+    //grabbing the second dropdown from the HTML
     let catDrop = document.querySelector("#categorySearch");
 
+    //using the data we called to use it
     let allCategories = await getCategories();
 
+    //creating a default option to the dropwdown
     let defaultOption = document.createElement("option");
     defaultOption.value = "0";
     defaultOption.innerText = "----Select Category----";
  
     catDrop.appendChild(defaultOption);
 
+    //here a loop is run to apply the names we need inside the dropdown 
     allCategories.forEach((category) => {
 
         //create the new option for the category we are on in the loop
         let newOption = document.createElement("option");
 
         //set the value for the option
-        newOption.value = 0;
+        newOption.value = category.categoryId;
 
         //set what the user sees 
         newOption.textContent = category.name;
