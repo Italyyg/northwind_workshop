@@ -5,11 +5,19 @@ window.onload = () => {
     //getting the dropdown from our html page to work with it
     let dropdown = document.querySelector("#productSearchDDL");
 
+    let catDrop = document.querySelector("#categorySearch");
+
+    //calling the funtion where the options were applied to the second dropdown
     applyToDropdown();
+
+    catDrop.addEventListener("change", displayEverythingInSecond)
+
 
     //if a option is selected from the dropdown it will run this function
     dropdown.addEventListener("change", displayAll);
 }
+
+
 //here i am running a function that will display everything on the list if
 //the value matches the "view all" value on the dropdown
 async function displayAll() {
@@ -30,17 +38,25 @@ async function displayAll() {
             buildTable(tbody, product)
         });
 
-
-    } else if (dropdown.value === "category") {
-
-        
-
     }else{
         console.log("not today haah");
     }
 
 
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
 //a function that builds the table that will display the data
 function buildTable(tbody, data) {
 
@@ -126,6 +142,37 @@ async function applyToDropdown(){
         catDrop.appendChild(newOption);
 
 
-    })
+    });
+
+
+}
+
+ async function displaySecondDrop(){
+
+    try{
+    let catDrop = document.querySelector("#categorySearch");
+
+    let response = await fetch(`http://localhost:8081/api/products/bycategory/${catDrop.value}`);
+    let data = await response.json();
+
+    return data
+    
+    }catch(error){
+    console.log("Girl..this doesnt work")
+    }
+
+}
+
+async function displayEverythingInSecond(){
+
+    let catToValue= await displaySecondDrop();
+    let tbody = document.querySelector("#tableBody");
+
+    catToValue.forEach((product) => {
+
+        //here we are building a table in where the items we loop through are placed by this function
+        buildTable(tbody, product)
+    });
+
 
 }
