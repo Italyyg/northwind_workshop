@@ -7,16 +7,19 @@ window.onload = () => {
 
     let catDrop = document.querySelector("#categorySearch");
 
+    
+
     //calling the funtion where the options were applied to the second dropdown
     applyToDropdown();
 
     catDrop.addEventListener("change", displayEverythingInSecond)
 
+    hideElement("#categorySearch");
 
+    // catSelect.addEventListener("change", hideShowRadio)
     //if a option is selected from the dropdown it will run this function
     dropdown.addEventListener("change", displayAll);
 }
-
 
 //here i am running a function that will display everything on the list if
 //the value matches the "view all" value on the dropdown
@@ -38,24 +41,73 @@ async function displayAll() {
             buildTable(tbody, product)
         });
 
+    }else if (dropdown.value === "category"){
+        showElement("#categorySearch")
+        document.querySelector("#tableBody").innerHTML = ""; // Clearing table body
+
     }else{
-        console.log("not today haah");
+
+        // Reset just the dropdown menu to its default option
+      document.querySelector("#productSearchDDL").selectedIndex = 0;
+      document.querySelector("#tableBody").innerHTML = ""; // Clearing table body
+
+        console.log("naur babe")
     }
 
 
 
 }
+async function displayEverythingInSecond(){
+
+    // let catDrop = document.querySelector("#categorySearch");
+
+    let catToValue= await displaySecondDrop();
+    let tbody = document.querySelector("#tableBody");
+
+    catToValue.forEach((product) => {
+
+        //here we are building a table in where the items we loop through are placed by this function
+        buildTable(tbody, product)
+    });
 
 
+}
+
+async function applyToDropdown(){
+
+    //grabbing the second dropdown from the HTML
+    let catDrop = document.querySelector("#categorySearch");
+
+    //using the data we called to use it
+    let allCategories = await getCategories();
+
+    //creating a default option to the dropwdown
+    let defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    
+    defaultOption.innerText = "----Select Category----";
+ 
+    catDrop.appendChild(defaultOption);
+
+    //here a loop is run to apply the names we need inside the dropdown 
+    allCategories.forEach((category) => {
+
+        //create the new option for the category we are on in the loop
+        let newOption = document.createElement("option");
+
+        //set the value for the option
+        newOption.value = category.categoryId;
+
+        //set what the user sees 
+        newOption.textContent = category.name;
+
+        catDrop.appendChild(newOption);
 
 
+    });
 
 
-
-
-
-
-
+}
 
 //a function that builds the table that will display the data
 function buildTable(tbody, data) {
@@ -112,42 +164,7 @@ async function getCategories(){
     }
 }
 
-async function applyToDropdown(){
-
-    //grabbing the second dropdown from the HTML
-    let catDrop = document.querySelector("#categorySearch");
-
-    //using the data we called to use it
-    let allCategories = await getCategories();
-
-    //creating a default option to the dropwdown
-    let defaultOption = document.createElement("option");
-    defaultOption.value = "0";
-    defaultOption.innerText = "----Select Category----";
- 
-    catDrop.appendChild(defaultOption);
-
-    //here a loop is run to apply the names we need inside the dropdown 
-    allCategories.forEach((category) => {
-
-        //create the new option for the category we are on in the loop
-        let newOption = document.createElement("option");
-
-        //set the value for the option
-        newOption.value = category.categoryId;
-
-        //set what the user sees 
-        newOption.textContent = category.name;
-
-        catDrop.appendChild(newOption);
-
-
-    });
-
-
-}
-
- async function displaySecondDrop(){
+async function displaySecondDrop(){
 
     try{
     let catDrop = document.querySelector("#categorySearch");
@@ -163,16 +180,16 @@ async function applyToDropdown(){
 
 }
 
-async function displayEverythingInSecond(){
+//This function will hide an HTML element on the page
+//Just pass it the id of the element you want to hide
+function hideElement(someSelector) {
+    let el = document.querySelector(someSelector);
+    el.style.display = "none";
+}
 
-    let catToValue= await displaySecondDrop();
-    let tbody = document.querySelector("#tableBody");
-
-    catToValue.forEach((product) => {
-
-        //here we are building a table in where the items we loop through are placed by this function
-        buildTable(tbody, product)
-    });
-
-
+//This function will show an HTML element on the page
+//Just pass it the id of the element you want to show
+function showElement(someSelector) {
+    let el = document.querySelector(someSelector);
+    el.style.display = "block";
 }
